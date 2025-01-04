@@ -1,67 +1,66 @@
 'use client';
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from 'react-hot-toast';
-import Link from "next/link";
-import UserTabs from "@/components/layout/UserTabs"
-import EditableImage from '@/components/layout/EditableImage'
-import UserForm from "@/components/layout/UserForm"
+import UserTabs from "@/components/layout/UserTabs";
+import UserForm from "@/components/layout/UserForm";
 
 export default function ProfilePage() {
-    const session = useSession();
-    console.log(session);
-    
+    const { data: session, status } = useSession(); // Properly access session and status
+
     const [user, setUser] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const [profileFetched, setProfileFetched] = useState(false);
-    const { status } = session;
 
     useEffect(() => {
-        if (status === 'authenticated') {
-    
-            fetch('/api/profile').then(response => {
-                response.json().then(data => {
+        if (status === 'authenticated' && session) {
+            fetch('/api/profile')
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch profile');
+                    }
+                    return response.json();
+                })
+                .then((data) => {
                     setUser(data);
                     setIsAdmin(data.admin);
                     setProfileFetched(true);
                 })
-            })
+                .catch((error) => {
+                    console.error('Error fetching profile:', error);
+                });
         }
     }, [session, status]);
 
     async function handleProfileInfoUpdate(ev, data) {
         ev.preventDefault();
 
-        const savingPromise = new Promise(async (resolve, reject) => {
-            const response = await fetch('/api/profile', {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-            })
-            if (response.ok) resolve()
-            else reject();
+        const savingPromise = fetch('/api/profile', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
         });
+
         await toast.promise(savingPromise, {
             loading: 'Saving...',
             success: 'Profile Saved!',
-            error: 'Error!'
-        })
+            error: 'Error saving profile!'
+        });
     }
 
     if (status === 'loading' || !profileFetched) {
-        return 'Loading...';
+        return <div>Loading...</div>;
     }
 
     if (status === 'unauthenticated') {
-        return redirect('/login');
+        redirect('/login');
+        return null; // Necessary to avoid further rendering
     }
-
-
 
     return (
         <section className="mt-8">
+            <Toaster />
             <UserTabs isAdmin={isAdmin} />
             <h1 className="text-center text-primary text-4xl mb-4 mt-8">Profile</h1>
             <div className="max-w-2xl mx-auto">

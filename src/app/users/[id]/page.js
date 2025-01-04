@@ -12,9 +12,8 @@ export default function EditUserPage(){
     const {id} = useParams();
 
     useEffect(() => {
-        fetch('/api/users').then(res => {
-            res.json().then(users => {
-                const user = users.find(u => u._id === id);
+        fetch('/api/profile?_id='+id).then(res => {
+            res.json().then(user => {
                 setUser(user);
             })
         })
@@ -25,7 +24,7 @@ export default function EditUserPage(){
         fetch('/api/profile', {
             method: 'PUT',
             headers: {'Content-Type' : 'application/json'},
-            
+            body: JSON.stringify({...data, _id:id}),
         })
     }
 
