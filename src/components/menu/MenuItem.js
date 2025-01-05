@@ -16,21 +16,16 @@ export default function MenuItem(menuItem) {
     const { addToCart } = useContext(CartContext)
 
     function handleAddToCartButtonClick() {
-        if (showPopup) {
-            addToCart(menuItem, selectedSize, selectedExtras);
-            toast.success('Added to cart!');
-            setShowPopup(false);
+
+        const hasOptions = sizes.length > 0 || extraIngredientPrices.length > 0;
+        if (hasOptions && !showPopup) {
+            setShowPopup(true);
+            return;
         }
-        else {
-            const hasOptions = sizes.length > 0 || extraIngredientPrices.length > 0;
-            if (hasOptions) {
-                setShowPopup(true);
-            }
-            else {
-                addToCart(menuItem);
-                toast.success('Added to cart!')
-            }
-        }
+
+        addToCart(menuItem, selectedSize, selectedExtras);
+        setShowPopup(false);
+        toast.success('Added to cart!')
 
 
     }
