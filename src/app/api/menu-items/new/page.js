@@ -22,6 +22,7 @@ export default function NewMenuItemPage() {
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json' },
             });
+            
             if (response.ok) {
                 resolve();
             } else reject();
