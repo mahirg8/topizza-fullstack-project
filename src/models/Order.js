@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { model } from "mongoose";
+import { model, models } from "mongoose";
 
 const OrderSchema = new Schema({
     userEmail: String,
@@ -11,4 +11,4 @@ const OrderSchema = new Schema({
     paid: {type: Boolean, default: false},
 }, {timestamps: true});
 
-export const Order = models?.Order || model('Order'. OrderSchema);
+export const Order = models?.Order || model('Order', OrderSchema);
