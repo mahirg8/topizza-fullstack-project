@@ -12,7 +12,7 @@ export default function Hero(){
                 <button className="flex border-0 items-center gap-2 py-2 text-gray-600 font-semibold">Learn More <Right/></button>
             </div>
             </div>
-            <div className="relative">
+            <div className="relative hidden md:block">
             <Image src={'/pizza.png'} layout={'fill'} objectFit={'contain'} alt={"pizza"}/>
             </div>
         </section>

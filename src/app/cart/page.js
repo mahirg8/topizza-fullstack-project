@@ -7,12 +7,21 @@ import Trash from "@/components/icons/Trash"
 import AddressInputs from "@/components/layout/AddressInputs"
 import { useProfile } from "@/components/UseProfile";
 import toast from "react-hot-toast";
+import CartProduct from "@/components/menu/CartProduct"
 
 
 export default function CartPage() {
     const { cartProducts, removeCartProduct } = useContext(CartContext);
     const [address, setAddress] = useState({});
     const {data: profileData} = useProfile();
+
+    useEffect(() => {
+        if(typeof window !== 'undefined'){
+            if(window.location.href.includes('canceled=1')){
+                toast.error('Payment failed!')
+            }
+        }
+    }, [])
 
     useEffect(() => {
         if(profileData?.city){
@@ -57,6 +66,16 @@ export default function CartPage() {
         })
         
     }
+
+    if(cartProducts?.length === 0){
+        return(
+            <section className="mt-8 text-center">
+                <SectionHeaders mainHeader="Cart"/>
+                <p className="mt-4">Your cart is empty</p>
+            </section>
+        );
+    }
+
     return (
         <section className="mt-8">
             <div className="text-center">
@@ -68,36 +87,7 @@ export default function CartPage() {
                         <div>No products in your shopping cart</div>
                     )}
                     {cartProducts?.length > 0 && cartProducts.map((product, index) => (
-                        <div className="flex items-center gap-8 border-b py-4">
-                            <div className="w-24">
-                                <Image width={240} height={240} src={product.image} alt={''} />
-                            </div>
-                            <div className="grow">
-                                <h3 className="font-semibold">
-                                    {product.name}
-                                </h3>
-                                {product.size && (
-                                    <div className="text-sm">
-                                        Size: <span>{product.size.name}</span>
-                                    </div>
-                                )}
-                                {product.extras?.length > 0 && (
-                                    <div className="text-sm text-gray-500">
-                                        {product.extras.map(extra => (
-                                            <div>{extra.name} ${extra.price}</div>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                            <div className="text-lg font-semibold">
-                                ${cartProductPrice(product)}
-                            </div>
-                            <div className="ml-2">
-                                <button type="button" onClick={() => removeCartProduct(index)} className="p-2">
-                                    <Trash />
-                                </button>
-                            </div>
-                        </div>
+                        <CartProduct product={product} onRemove={removeCartProduct}/>
                     ))}
                     <div className="py-2 justify-end items-center pr-16 flex">
                         <div className="text-gray-500">
