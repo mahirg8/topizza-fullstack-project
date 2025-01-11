@@ -1,5 +1,5 @@
 'use client';
-import { CartContext, cartProductPrice } from "@/components/AppContext";
+import { CartContext, cartProductPrice, removeCartProduct } from "@/components/AppContext";
 import SectionHeaders from "@/components/layout/SectionHeaders";
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
@@ -87,7 +87,7 @@ export default function CartPage() {
                         <div>No products in your shopping cart</div>
                     )}
                     {cartProducts?.length > 0 && cartProducts.map((product, index) => (
-                        <CartProduct key={index} product={product} onRemove={removeCartProduct}/>
+                        <CartProduct key={index} product={product} index={index} onRemove={removeCartProduct}/>
                     ))}
                     <div className="py-2 justify-end items-center pr-16 flex">
                         <div className="text-gray-500">
