@@ -39,7 +39,7 @@ export default function UserForm({ user, onSave }) {
                 {loggedInUserData.admin && (
                 <div>
                     <label className="p-2 inline-flex items-center gap-2 mb-2" htmlFor="adminCb" >
-                        <input id="adminCb" type="checkbox" className="" value={'1'} checked={admin} onClick={ev => setAdmin(ev.target.checked)} />
+                        <input id="adminCb" type="checkbox" className="" value={'1'} checked={admin} onChange={ev => setAdmin(ev.target.checked)} />
                         <span>Admin</span>
                     </label>
                 </div>

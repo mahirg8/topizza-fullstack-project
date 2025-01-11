@@ -69,8 +69,8 @@ export default function MenuItem(menuItem) {
                                 <div className="py-2">
                                     <h3 className="text-center text-gray-700">Pick your size</h3>
                                     {sizes.map(size => (
-                                        <label className="flex items-center gap-1 p-4 border rounded-md mb-1">
-                                            <input onClick={() => setSelectedSize(size)} checked={selectedSize?.name === size.name} type="radio" name="size" /> {size.name} ${basePrice + size.price}
+                                        <label key={size._id} className="flex items-center gap-1 p-4 border rounded-md mb-1">
+                                            <input onChange={() => setSelectedSize(size)} checked={selectedSize?.name === size.name} type="radio" name="size" /> {size.name} ${basePrice + size.price}
                                         </label>
                                     ))}
                                 </div>
@@ -79,8 +79,8 @@ export default function MenuItem(menuItem) {
                                 <div className="py-2">
                                     <h3 className="text-center text-gray-700">Any extras?</h3>
                                     {extraIngredientPrices.map(extraThing => (
-                                        <label className="flex items-center gap-1 p-4 border rounded-md mb-1">
-                                            <input onClick={ev => handleExtraThingClick(ev, extraThing)} type="checkbox" name={extraThing.name} /> {extraThing.name} +${extraThing.price}
+                                        <label key={extraThing._id} className="flex items-center gap-1 p-4 border rounded-md mb-1">
+                                            <input onChange={ev => handleExtraThingClick(ev, extraThing)} checked={selectedExtras.map(e => e._id).includes(extraThing._id)} type="checkbox" name={extraThing.name} /> {extraThing.name} +${extraThing.price}
                                         </label>
                                     ))}
                                 </div>

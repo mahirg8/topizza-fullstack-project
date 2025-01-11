@@ -1,6 +1,5 @@
 'use client';
 import { useSession } from "next-auth/react";
-import { useState } from "react";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { useContext, useState } from "react";
@@ -52,18 +51,20 @@ export default function Header() {
               </span>
             )}
           </Link>
-          <button className="p-1 border">
+          <button className="p-1 border" onClick={() => setMobileNavOpen(prev => !prev)}>
             <Bars2 />
           </button>
         </div>
       </div>
-      <div className="md:hidden p-4 bg-gray-200 rounded-lg mt-2 flex flex-col gap-2 text-center">
-        <Link href={'/'}>Home</Link>
-        <Link href={'/menu'}>Menu</Link>
-        <Link href={'/#about'}>About</Link>
-        <Link href={'/#contact'}>Contact</Link>
-        <AuthLinks status={status} userName={userName}/>
-      </div>
+      {mobileNavOpen && (
+        <div onClick={() => setMobileNavOpen(false)} className="md:hidden p-4 bg-gray-200 rounded-lg mt-2 flex flex-col gap-2 text-center">
+          <Link href={'/'}>Home</Link>
+          <Link href={'/menu'}>Menu</Link>
+          <Link href={'/#about'}>About</Link>
+          <Link href={'/#contact'}>Contact</Link>
+          <AuthLinks status={status} userName={userName} />
+        </div>
+      )}
       <div className="hidden md:flex items-center justify-between">
         <nav className="flex items-center gap-8 text-gray-500 font-semibold">
           <Link className="text-primary font-semibold text-2xl" href={'/'}>TOPizza</Link>
